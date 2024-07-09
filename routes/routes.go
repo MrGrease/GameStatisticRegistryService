@@ -5,7 +5,7 @@ import (
 )
 
 func RegisterRoutes(server *gin.Engine) {
-	server.GET("/stats/game/:name", GetAllGameStats)            //Get paginated list of all game results for given game name
+	server.GET("/stats/game/:name", ListPlayerStats)            //Get paginated list of all game results for given game name
 	server.GET("/stats/game/:name/session/:id", GetGameStats)   //Get stats for a single game session
 	server.GET("/stats/game/:name/players", GetAllPlayerStats)  //Get paginated list of all player stats for given game name
 	server.GET("/stats/game/:name/players/:id", GetPlayerStats) //Get paginated list of all player stats for given game name and given player id

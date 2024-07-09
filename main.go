@@ -13,5 +13,12 @@ func main() {
 	godotenv.Load()
 	server := gin.Default()
 	routes.RegisterRoutes(server)
+
+	_, portPresent := os.LookupEnv("PORT")
+
+	if !portPresent {
+		panic("Incomplete Configuration Error: No port provided!")
+	}
+
 	server.Run(os.Getenv("PORT"))
 }

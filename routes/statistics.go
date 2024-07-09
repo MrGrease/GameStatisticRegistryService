@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllGameStats(context *gin.Context) {
+func ListPlayerStats(context *gin.Context) {
 	//Todo fill this in
 	context.JSON(http.StatusOK, gin.H{"message": "NOT IMPLEMENTED YET"})
 }
