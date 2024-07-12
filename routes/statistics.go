@@ -27,6 +27,14 @@ func GetPlayerStats(context *gin.Context) {
 }
 
 func EndOfSessionSave(context *gin.Context) {
+	// which game are we playing
+
+	// parse json
+
+	// which db // from env file
+
+	// save to db
+
 	//Todo fill this in
 	context.JSON(http.StatusOK, gin.H{"message": "NOT IMPLEMENTED YET"})
 }
