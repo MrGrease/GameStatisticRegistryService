@@ -1,8 +1,11 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
-//Inbetween types used to pass data around until we decide what DB to use
+// Inbetween types used to pass data around until we decide what DB to use
 type RenegadeXPlayerData struct {
 	UniqueId                string
 	Name                    string
@@ -55,7 +58,9 @@ type RenegadeXStats struct {
 
 func (statsData *RenegadeXStats) ParseJsonData(rawData map[string]interface{}) {
 	fmt.Println("Attempting to parse raw data")
-	//statsData.Winner = int16(rawData["winner"]) How do we handle this?
+	winner, _ := strconv.Atoi(rawData["winner"].(string))
+	statsData.Winner = int16(winner)
+	fmt.Println(statsData)
 }
 
 //End of inbetween types
