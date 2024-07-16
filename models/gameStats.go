@@ -1,5 +1,5 @@
 package models
 
 type GameStats interface {
-	ParseJsonData(rawData string)
+	ParseJsonData(rawData map[string]interface{})
 }

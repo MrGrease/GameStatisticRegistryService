@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gamestatsticregistry/mrgrease.com/db"
 	"gamestatsticregistry/mrgrease.com/routes"
 	"os"
 
@@ -13,6 +14,7 @@ func main() {
 	godotenv.Load()
 	server := gin.Default()
 	routes.RegisterRoutes(server)
+	db.InitCurrentDb()
 
 	_, portPresent := os.LookupEnv("PORT")
 
