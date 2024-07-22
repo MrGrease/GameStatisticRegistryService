@@ -56,11 +56,16 @@ type RenegadeXStats struct {
 	Team1     RenegadeXTeamData
 }
 
-func (statsData *RenegadeXStats) ParseJsonData(rawData map[string]interface{}) {
+func (statsData *RenegadeXStats) ParseJsonData(rawData map[string]interface{}) error {
 	fmt.Println("Attempting to parse raw data")
-	winner, _ := strconv.Atoi(rawData["winner"].(string))
+	winner, err := strconv.Atoi(rawData["winner"].(string))
+	if err != nil {
+		return err
+	}
 	statsData.Winner = int16(winner)
 	fmt.Println(statsData)
+
+	return err
 }
 
 //End of inbetween types

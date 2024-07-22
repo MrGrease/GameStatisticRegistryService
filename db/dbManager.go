@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 	"gamestatsticregistry/mrgrease.com/models"
 	"os"
@@ -13,21 +14,21 @@ type DbManager interface {
 
 var DB DbManager
 
-func GetCurrentDbPointer() DbManager {
+func GetCurrentDbPointer() (DbManager, error) {
 	_, dbPresent := os.LookupEnv("DBTYPE")
 
 	if !dbPresent {
-		panic("Incomplete Configuration Error: No Db provided!")
+		return nil, errors.New("Incomplete Configuration Error: No Db provided!")
 	}
 
-	return DB
+	return DB, nil
 }
 
-func InitCurrentDb() {
+func InitCurrentDb() error {
 	_, dbPresent := os.LookupEnv("DBTYPE")
 
 	if !dbPresent {
-		panic("Incomplete Configuration Error: No Db provided!")
+		return errors.New("Incomplete Configuration Error: No Db provided!")
 	}
 
 	fmt.Println("Creating current DB Manager")
@@ -36,4 +37,6 @@ func InitCurrentDb() {
 	case "MONGO":
 		DB = new(MongoManager)
 	}
+
+	return nil
 }

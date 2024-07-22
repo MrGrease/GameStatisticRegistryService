@@ -49,7 +49,13 @@ func EndOfSessionSave(context *gin.Context) {
 	stats.ParseJsonData(jsonBody)
 
 	// which db are we using
-	var databaseManager db.DbManager = db.GetCurrentDbPointer()
+	databaseManager, err := db.GetCurrentDbPointer()
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	// save to db
 	databaseManager.SaveEndOfSessionDataToDb(AppName, stats)
 

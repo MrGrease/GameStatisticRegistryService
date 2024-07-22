@@ -5,7 +5,6 @@ import (
 )
 
 func GetAppParsedType(appName string) models.GameStats {
-
 	switch appName {
 	case "RenegadeX":
 		return new(models.RenegadeXStats)
