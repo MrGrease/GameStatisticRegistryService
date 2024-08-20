@@ -42,12 +42,28 @@ type RenegadeXPlayer struct {
 	TechCaptures            int    `json:"tech_captures"`
 	VehicleEmps             int    `json:"vehicle_emps"`
 }
-type RenegadeXTeam struct {
+
+type RenegadeXTeamInput struct {
 	Name           string                  `json:"name"`
 	Score          int                     `json:"score"`
 	BuildingsAlive int                     `json:"buildingsAlive"`
 	BuildingsMax   int                     `json:"buildingsMax"`
 	Players        map[int]RenegadeXPlayer `json:"players"`
+}
+
+type RenegadeXTeam struct {
+	Name           string            `json:"name"`
+	Score          int               `json:"score"`
+	BuildingsAlive int               `json:"buildingsAlive"`
+	BuildingsMax   int               `json:"buildingsMax"`
+	Players        []RenegadeXPlayer `json:"players"`
+}
+
+type RenegadeXStatsInput struct {
+	Winner    string             `json:"winner"`
+	WinMethod string             `json:"winMethod"`
+	Team0     RenegadeXTeamInput `json:"team0"`
+	Team1     RenegadeXTeamInput `json:"team1"`
 }
 
 type RenegadeXStats struct {
@@ -57,15 +73,33 @@ type RenegadeXStats struct {
 	Team1     RenegadeXTeam `json:"team1"`
 }
 
-func (statsData *RenegadeXStats) Parse(rawData []byte) error {
+func getTeam(input RenegadeXTeamInput) RenegadeXTeam {
+	team := RenegadeXTeam{
+		Name:           input.Name,
+		Score:          input.Score,
+		BuildingsAlive: input.BuildingsAlive,
+		BuildingsMax:   input.BuildingsMax,
+	}
+	for _, p := range input.Players {
+		team.Players = append(team.Players, p)
+	}
+	return team
+}
+
+func (stats *RenegadeXStats) Parse(rawData []byte) error {
 	fmt.Println("Attempting to parse raw data")
 
-	err := json.Unmarshal(rawData, statsData)
+	statsInput := RenegadeXStatsInput{}
+	err := json.Unmarshal(rawData, &statsInput)
 	if err != nil {
 		return err
 	}
-	return nil
+	stats.Winner = statsInput.Winner
+	stats.WinMethod = statsInput.WinMethod
+	stats.Team0 = getTeam(statsInput.Team0)
+	stats.Team1 = getTeam(statsInput.Team1)
 	// TODO do the necessary checks and changes if needed
+	return nil
 
 	// //Who won this game? integer represents teams
 	// winner, err := strconv.Atoi(rawData["winner"].(string))
