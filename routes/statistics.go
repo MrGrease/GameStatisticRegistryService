@@ -2,6 +2,7 @@ package routes
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 
 	"gamestatsticregistry/mrgrease.com/db"
@@ -39,14 +40,14 @@ func EndOfSessionSave(context *gin.Context) {
 	fmt.Println("Grabbing parser type...")
 	var stats models.GameStats = parsers.GetAppParsedType(AppName)
 
-	var jsonBody map[string]interface{}
-	if err := context.ShouldBindJSON(&jsonBody); err != nil {
+	body, err := io.ReadAll(context.Request.Body)
+	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// parse json to an inbetween type (for sanity checks and generalization)
-	stats.ParseJsonData(jsonBody)
+	stats.Parse(body)
 
 	// which db are we using
 	databaseManager, err := db.GetCurrentDbPointer()
